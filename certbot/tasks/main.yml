@@ -36,13 +36,13 @@
       command: certbot certonly
       responses:
         'Select the appropriate number \[1\-2\] then \[enter\] \(press ' : '1'
-        'Enter email address \(used for urgent renewal and security notices\)' : "{{ ssl_email }}"  # use var
+        'Enter email address \(used for urgent renewal and security notices\)' : "{{ ssl_email }}"
         '\(Y\)es\/\(N\)o:' : 'Y'
-        'Please enter in your domain name\(s\)' : "{{ registry_host }}"  # use var
+        'Please enter in your domain name\(s\)' : "{{ registry_host }}"
 
 # Copy certs to cert diretory
 
-  - name: Make sure {{ mount_dir }}/certs diretory exists
+  - name: Make sure {{ mount_dir }}/certs directory exists
     file:
       path: "{{ mount_dir }}/certs"
       state: directory

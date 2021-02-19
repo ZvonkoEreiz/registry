@@ -9,7 +9,7 @@
   - name: install Docker from official repo
     yum: 
       name: docker-ce
-      state: latest
+      state: present
 
   - name: enable Docker
     service:

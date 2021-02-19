@@ -2,3 +2,6 @@
 mount_dir: "/etc/docker/{{ registry_host }}"
 registry_host: registry2.zvonkotest.online
 ssl_email: zeriksen@liquidweb.com
+registry_container_name: registry
+registry_image: registry:2.1
+host_listening_port: 5443
