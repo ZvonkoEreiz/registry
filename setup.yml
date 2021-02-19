@@ -1,0 +1,8 @@
+---
+  - hosts: all
+    become: yes
+    gather_facts: no
+    roles:
+      - docker_install
+      - certbot
+      - docker_registry

@@ -1,0 +1,18 @@
+---
+# install Docker from official repo on Centos 7
+
+  - name: pull official Docker repo
+    get_url:
+      url: https://download.docker.com/linux/centos/docker-ce.repo
+      dest: /etc/yum.repos.d/docker-ce.repo
+
+  - name: install Docker from official repo
+    yum: 
+      name: docker-ce
+      state: latest
+
+  - name: enable Docker
+    service:
+      name: docker
+      state: started
+      enabled: yes

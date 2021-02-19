@@ -1,0 +1,59 @@
+---
+# tasks file for certbot
+
+# Install certbot
+
+  - name: Install epel-release
+    yum:
+      name: epel-release
+      state: present
+
+  - name: Install certbot
+    yum:
+      name: certbot
+      state: present
+
+# Install requirement
+
+  - name: Install pip
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - python3-pip
+      - python-pip
+
+  - name: Install pip2 pexpect
+    command: pip2 install pexpect
+
+  - name: Install pip3 pexpect
+    command: pip3 install pexpect
+
+# Install SSL certificate
+
+  - name: Install SSL certificate
+    expect:
+      command: certbot certonly
+      responses:
+        'Select the appropriate number \[1\-2\] then \[enter\] \(press ' : '1'
+        'Enter email address \(used for urgent renewal and security notices\)' : "{{ ssl_email }}"  # use var
+        '\(Y\)es\/\(N\)o:' : 'Y'
+        'Please enter in your domain name\(s\)' : "{{ registry_host }}"  # use var
+
+# Copy certs to cert diretory
+
+  - name: Make sure {{ mount_dir }}/certs diretory exists
+    file:
+      path: "{{ mount_dir }}/certs"
+      state: directory
+
+  - name: copy certificates to {{ mount_dir }}/certs
+    copy:
+      src: /etc/letsencrypt/live/{{ registry_host }}/{{ item }}
+      dest: "{{ mount_dir }}/certs"
+      remote_src: yes
+    loop:
+      - cert.pem
+      - chain.pem
+      - fullchain.pem
+      - privkey.pem 

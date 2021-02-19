@@ -1,0 +1,71 @@
+---
+# tasks file for docker_registry
+
+# Install python docker module with pip
+
+  - name: make sure python3 is installed
+    yum: name=python3 state=present
+    
+  - name: check if python docker libarary is installed
+    command: python3 -c "import docker"
+    register: py_doc_lib_check
+    ignore_errors: yes
+  - debug: msg="{{ py_doc_lib_check.rc }}"
+  
+  - name: install pip3
+    yum:
+      name: python3-pip
+      state: present
+
+  - name: install python docker libarary
+    shell:
+      cmd: pip3 install docker
+    when: py_doc_lib_check.rc >= 1
+
+  - name: check if python docker libarary is installed
+    command: python2 -c "import docker"
+    register: py_doc_lib_check
+    ignore_errors: yes
+  - debug: msg="{{ py_doc_lib_check.rc }}"
+  
+  - name: install pip2
+    yum:
+      name: python-pip
+      state: present
+      
+  - name: install python docker libarary
+    shell:
+      cmd: pip2 install docker
+    when: py_doc_lib_check.rc >= 1
+
+# Copy docker config.yml
+
+  - name: Make sure {{ mount_dir }}/registry exists
+    file:
+      path: "{{ mount_dir }}/registry"
+      state: directory
+
+  - name: Copy config.yml
+    copy:
+      src: files/config.yml
+      dest: "{{ mount_dir }}/registry"
+
+# Start docker registry container
+
+  - name: Create registry container
+    docker_container:
+      name: registry2
+      image: registry:2.1
+      state: started
+      restart_policy: always
+      volumes:
+        - "{{ mount_dir }}/certs:/certs"
+        - "{{ mount_dir }}/registry:/etc/docker/registry"
+        - /var/lib/registry:/var/lib/registry
+      env:
+        REGISTRY_PROXY_REMOTEURL: "https://registry-1.docker.io"
+        REGISTRY_HTTP_ADDR: "0.0.0.0:443"
+        REGISTRY_HTTP_TLS_CERTIFICATE: "/certs/fullchain.pem"
+        REGISTRY_HTTP_TLS_KEY: "/certs/privkey.pem"
+      ports:
+        - "5443:443"
