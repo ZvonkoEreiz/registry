@@ -64,8 +64,16 @@ Next, check log entries. You'll have to `grep "Trying to pull"` from logs depend
 
 ```
 
-CentOS 7 nad 8 - /var/log/messages
+CentOS 7 and 8 - /var/log/messages
 Ubuntu 18.04 and 20.04 - /var/log/syslog
+
+```
+
+For Fedora 32 and 33 use:
+
+```
+
+journalctl -u docker | grep "Trying to pull"
 
 ```
 
@@ -73,5 +81,13 @@ If everything is working as intended you will see following line which indicates
 
 ```
 Feb 22 14:33:39 local_machine dockerd: time="2021-02-22T14:33:39.618247519+01:00" level=debug msg="Trying to pull alpine from https://registry.domain.tld:5443/ v2"
+
+```
+
+However, if you see following line which indicates that image was pulled from docker.io
+
+```
+
+Feb 22 18:41:50 hhh dockerd[3919]: time="2021-02-22T18:41:50.536343645+01:00" level=debug msg="Trying to pull alpine from https://registry-1.docker.io v2"
 
 ```
