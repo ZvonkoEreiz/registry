@@ -2,6 +2,7 @@ certbot
 =========
 
 Install Certbot and SSL certificate for the domain. Additionally, it installs Python module pexepct required to autofill certificate request.
+
 Role comes with following tags:
 
 certbot - installs Certbot
