@@ -17,7 +17,7 @@ Domain with DNS pointing to the server due to DNS verification required by Certb
 Role Variables
 --------------
 
-All variables are set up in project root directory group_vars/all as they are used by multiple roles. If you're using this role as standalone, you can set up following in defaults/main.yml or vars/main.yml:
+All variables are set up in project root directory group_vars/all as they are used by multiple roles. If you're using this role as a standalone, you can set up following in defaults/main.yml or vars/main.yml:
 
 ```
 ssl_email: user@domain.tld #administrative email address for your SSL certificates
