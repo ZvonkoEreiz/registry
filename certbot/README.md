@@ -9,6 +9,14 @@ certbot - installs Certbot
 
 certificate - installs SSL certificate
 
+For instance, to install Cerbot only you would run:
+
+```
+
+ansible-playbook -i hosts setup.yml --tags=certbot
+
+```
+
 Requirements
 ------------
 
