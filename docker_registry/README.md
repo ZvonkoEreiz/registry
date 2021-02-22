@@ -1,17 +1,27 @@
-Role Name
+docker_registry
 =========
 
-A brief description of the role goes here.
+Set up Docker pull through registry container.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+Valid SSL certificate for the registry hostname located in {{ mount_dir }}/certs
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+All variables are set up in project root directory group_vars/all as they are used by multiple roles. If you're using this role as a standalone, you can set up following in defaults/main.yml or vars/main.yml:
+
+```
+
+mount_dir: /path/to/some/dir/{{ registry_host }} #Path to directory followed by {{ registry_host }} where you are going to store SSL certificates and Docker's config.yml
+registry_host: domain.tld #Hostname for your pull through registry
+registry_container_name: some_name #Name for your registry Docker container
+registry_image: registry:2.1 #Image for your registry container
+host_listening_port: 5443 #Docker host port you are going to map container's port 433 to
+
+```
 
 Dependencies
 ------------
@@ -21,18 +31,6 @@ A list of other roles hosted on Galaxy should go here, plus any details in regar
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
     - hosts: servers
       roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
-
-Author Information
-------------------
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+         - docker_registry
