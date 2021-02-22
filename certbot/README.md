@@ -5,9 +5,9 @@ Install Certbot and SSL certificate for the domain. Additionally, it installs Py
 
 Role comes with following tags:
 
-certbot - installs Certbot
+`certbot` - installs Certbot
 
-certificate - installs SSL certificate
+`certificate` - installs SSL certificate
 
 For instance, to install Cerbot only you would run:
 
