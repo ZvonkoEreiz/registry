@@ -49,3 +49,29 @@ or
 systemctl restart docker
 
 ```
+
+To check if Docker is pulling images from pull through proxy server, run following command from your local machine:
+
+```
+
+docker pull alpine
+
+```
+
+This will pull small alpine image. 
+
+Next, check log entries. You'll have to `grep "Trying to pull"` from logs depending on OS you are running. 
+
+```
+
+CentOS 7 - /var/log/messages
+Ubuntu 18.04 - /var/log/syslog
+
+```
+
+If everything is working as intended you will see following line which indicates that image has been pulled from `https://registry.domain.tld:5443`
+
+```
+Feb 22 14:33:39 local_machine dockerd: time="2021-02-22T14:33:39.618247519+01:00" level=debug msg="Trying to pull alpine from `https://registry.domain.tld:5443/` v2"
+
+```
