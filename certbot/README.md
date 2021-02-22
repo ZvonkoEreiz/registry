@@ -9,6 +9,7 @@ Role comes with following tags:
 
 `certificate` - installs SSL certificate
 
+
 For instance, to install Cerbot only you would run:
 
 ```
