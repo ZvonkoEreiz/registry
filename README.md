@@ -76,6 +76,7 @@ For Fedora 32 and 33 use:
 journalctl -u docker | grep "Trying to pull"
 
 ```
+If you are using Debian 10 or Mac, Lord have mercy on your soul.
 
 If everything is working as intended you will see following line which indicates that image has been pulled from `https://registry.domain.tld:5443`
 
