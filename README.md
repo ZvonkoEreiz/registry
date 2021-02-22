@@ -76,7 +76,7 @@ For Fedora 32 and 33 use:
 journalctl -u docker | grep "Trying to pull"
 
 ```
-If you are using Debian 10 or Mac, Lord have mercy on your soul.
+
 
 If everything is working as intended you will see following line which indicates that image has been pulled from `https://registry.domain.tld:5443`
 
@@ -85,10 +85,10 @@ Feb 22 14:33:39 local_machine dockerd: time="2021-02-22T14:33:39.618247519+01:00
 
 ```
 
-However, if you see following line which indicates that image was pulled from docker.io
+However, if you see following line, it indicates that image was pulled from docker.io and you'll have to set up /etc/docker/daemon.json once again and restart docker on your local machine
 
 ```
 
-Feb 22 18:41:50 hhh dockerd[3919]: time="2021-02-22T18:41:50.536343645+01:00" level=debug msg="Trying to pull alpine from https://registry-1.docker.io v2"
+Feb 22 18:41:50 local_machine dockerd[3919]: time="2021-02-22T18:41:50.536343645+01:00" level=debug msg="Trying to pull alpine from https://registry-1.docker.io v2"
 
 ```
