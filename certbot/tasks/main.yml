@@ -7,11 +7,13 @@
     yum:
       name: epel-release
       state: present
+    tags: certbot
 
   - name: Install certbot
     yum:
       name: certbot
       state: present
+    tags: certbot
 
 # Install requirement
 
@@ -22,12 +24,15 @@
     loop:
       - python3-pip
       - python-pip
+    tags: certificate
 
   - name: Install pip2 pexpect
     command: pip2 install pexpect
+    tags: certificate
 
   - name: Install pip3 pexpect
     command: pip3 install pexpect
+    tags: certificate
 
 # Install SSL certificate
 
@@ -39,6 +44,7 @@
         'Enter email address \(used for urgent renewal and security notices\)' : "{{ ssl_email }}"
         '\(Y\)es\/\(N\)o:' : 'Y'
         'Please enter in your domain name\(s\)' : "{{ registry_host }}"
+    tags: certificate
 
 # Copy certs to cert diretory
 
