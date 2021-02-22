@@ -64,8 +64,8 @@ Next, check log entries. You'll have to `grep "Trying to pull"` from logs depend
 
 ```
 
-CentOS 7 - /var/log/messages
-Ubuntu 18.04 - /var/log/syslog
+CentOS 7 nad 8 - /var/log/messages
+Ubuntu 18.04 and 20.04 - /var/log/syslog
 
 ```
 
