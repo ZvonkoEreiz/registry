@@ -25,7 +25,9 @@ host_listening_port: 5443 #Docker host port you are going to map container's por
 
 ```
 
-### Local machine instructions
+## Local machine instructions
+
+### Linux
 
 In order to use freshly built container as your pull through proxy for your local machine, please add following lines to `/etc/docker/daemon.json` file on your local machine with registry.domain.tld:5443 being registry hostname and Docker host port:
 
@@ -92,3 +94,55 @@ However, if you see following line, it indicates that image was pulled from dock
 Feb 22 18:41:50 local_machine dockerd[3919]: time="2021-02-22T18:41:50.536343645+01:00" level=debug msg="Trying to pull alpine from https://registry-1.docker.io v2"
 
 ```
+
+### OSX
+
+Open your Docker GUI and switch to Settings > Docker Engine. Here you can edit you daemon.json file by adding following to it with registry.domain.tld:5443 being registry hostname and Docker host port:
+
+```
+
+  "registry-mirrors": [
+    "https://registry.domain.tld:5443"
+  ],
+  
+  ```
+  
+  If there is any issue with the code you'll see message written in red that looks like:
+  
+  ```
+  
+  Unexpected token a in JSON at position 1
+  
+  ```
+  
+If everything looks fine click on "Apply & Restart" button. 
+
+Next step is to check if Docker is pulling images from proxy server. To do that, open two tabs in your terminal. In the first tab run following two commands:
+
+```
+
+pred='process matches ".*(ocker|vpnkit).*"
+  || (process in {"taskgated-helper", "launchservicesd", "kernel"} && eventMessage contains[c] "docker")'
+  
+/usr/bin/log stream --style syslog --level=debug --color=always --predicate "$pred"
+
+```
+
+In your second terminal tab, run docker pull alpine (or any other image you'd like to pull) and you should see some of following lines in your first terminal tab:
+
+```
+
+2021-02-25 15:32:07.133445+0100  localhost com.docker.vpnkit[14873]: HTTP proxy --> 10.10.10.10:5443 Host:registry.domain.tld:5443 (Origin): Successfully connected to 10.10.10.10:5443
+
+```
+
+This indicates that your Docker engine is trying to pull image from proxy server registry.domain.tld:5443, however, please keep in mind that if you misspell image name or if set up on your local machine was not applied correctly, you will also see following lines which indicate pull from Docker registry server registry-1.docker.io:443:
+
+```
+
+2021-02-25 15:28:20.874663+0100  localhost com.docker.vpnkit[14873]: HTTP proxy --> 52.1.121.53:443 Host:registry-1.docker.io:443 (Origin): CONNECT
+2021-02-25 15:28:21.010527+0100  localhost com.docker.vpnkit[14873]: HTTP proxy --> 52.1.121.53:443 Host:registry-1.docker.io:443 (Origin): Successfully connected to 52.1.121.53:443
+
+```
+
+If this happens, please check image name and that proxy server hostname has been spelled correctly and that changes have been applied. 
