@@ -97,7 +97,7 @@ Feb 22 18:41:50 local_machine dockerd[3919]: time="2021-02-22T18:41:50.536343645
 
 ### OSX
 
-Open your Docker GUI and switch to Settings > Docker Engine. Here you can edit you daemon.json file by adding following to it with registry.domain.tld:5443 being registry hostname and Docker host port:
+Open your Docker GUI and switch to Settings > Docker Engine. Here you can edit you daemon.json file by adding following to lines with registry.domain.tld:5443 being registry hostname and Docker host port:
 
 ```
 
