@@ -15,24 +15,25 @@
       state: present
     tags: certbot
 
-# Install requirement
+# Install pexpect
+
+  - name: Check if python pexpect is installed
+    command: python2 -c "import pexpect"
+    register: pexpect_check
+    ignore_errors: yes
+  - debug: msg="{{ pexpect_check.rc }}"
+    tags: certificate
 
   - name: Install pip
-    yum:
-      name: "{{ item }}"
-      state: present
-    loop:
-      - python3-pip
-      - python-pip
+    yum: name=python-pip state=present
+    when: pexpect_check.rc >= 1
     tags: certificate
 
   - name: Install pip2 pexpect
     command: pip2 install pexpect
+    when: pexpect_check.rc >= 1
     tags: certificate
 
-  - name: Install pip3 pexpect
-    command: pip3 install pexpect
-    tags: certificate
 
 # Install SSL certificate
 
@@ -46,14 +47,14 @@
         'Please enter in your domain name\(s\)' : "{{ registry_host }}"
     tags: certificate
 
-# Copy certs to cert diretory
+# Copy certs to cert directory
 
   - name: Make sure {{ mount_dir }}/certs directory exists
     file:
       path: "{{ mount_dir }}/certs"
       state: directory
 
-  - name: copy certificates to {{ mount_dir }}/certs
+  - name: Copy certificates to {{ mount_dir }}/certs
     copy:
       src: /etc/letsencrypt/live/{{ registry_host }}/{{ item }}
       dest: "{{ mount_dir }}/certs"
