@@ -1,2 +1,68 @@
 ---
 # tasks file for iptables
+
+  - name: Remove the firewalld package
+    yum:
+      name: firewalld
+      state: absent
+
+  - name: Install iptables and iptables-services
+    yum:
+      name: "{{ item }}"
+      state: present
+    loop: "{{ iptables }}"
+
+  - name: Enable service iptables and ensure it is not masked
+    systemd:
+      name: iptables
+      enabled: yes
+      masked: no
+
+  - name: Set the policy for the INPUT chain to ACCEPT temporarily
+    iptables:
+      chain: INPUT
+      policy: ACCEPT
+
+  - name: Flushing existing firewall rules
+    iptables:
+      chain: INPUT
+      flush: yes
+
+  - name: Allow related and established connections
+    iptables:
+      chain: INPUT
+      ctstate: ESTABLISHED,RELATED
+      jump: ACCEPT
+
+  - name: Allow ICMP
+    iptables:
+      chain: INPUT
+      protocol: icmp
+      jump: ACCEPT
+
+  - name: Allow loopback
+    iptables:
+      chain: INPUT
+      in_interface: lo
+      jump: ACCEPT
+
+  - name: Opening firewall ports
+    iptables:
+      chain: INPUT
+      protocol: TCP
+      destination_port: "{{ item }}"
+      jump: ACCEPT
+    loop: "{{ fw_rules }}"
+
+  - name: Set the policy for the INPUT chain to DROP
+    iptables:
+      chain: INPUT
+      policy: DROP
+
+  - name: Saving iptables rules
+    shell: service iptables save
+
+  - name: restart docker
+    service:
+      name: docker
+      state: restarted
